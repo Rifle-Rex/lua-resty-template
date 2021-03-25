@@ -385,6 +385,10 @@ local function new(template, safe)
         end
         cache_key = cache_key or view
         local cache = template.cache
+        -- check if ngx.var.template_namespace var is set.
+        if var.template_namespace ~= nil and var.template_namespace ~= '' then
+            cache_key = var.template_namespace .. ':' .. cache_key
+        end
         if cache[cache_key] then return cache[cache_key], true end
         local func = load_chunk(template.parse(view, plain))
         if caching then cache[cache_key] = func end
